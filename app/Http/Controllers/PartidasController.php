@@ -133,24 +133,22 @@ class PartidasController extends Controller
     }
 
     public function ranking()
-    {
-        $ranking = Partidas::select('user_id')
-            ->selectRaw('MIN(duracion) as mejor_tiempo')
-            ->selectRaw('MIN(clicks) as min_clicks')
-            ->selectRaw('MAX(puntos) as max_puntos')
-            ->groupBy('user_id')
-            ->orderBy('mejor_tiempo')
-            ->orderBy('min_clicks')
-            ->orderBy('max_puntos')
-            ->with('user')
-            ->take(5)
-            ->get();
+{
+    $ranking = Partidas::select('user_id')
+        ->selectRaw('MIN(clicks) as min_clicks')
+        ->selectRaw('MAX(puntos) as max_puntos')
+        ->groupBy('user_id')
+        ->orderByDesc('max_puntos')
+        ->orderBy('min_clicks')
+        ->with('user')
+        ->take(5)
+        ->get();
 
-        return response()->json([
-            'mensaje' => 'Ranking obtenido del TOP 5 correctamente',
-            'datos' => $ranking,
-        ], 200);
-    }
+    return response()->json([
+        'mensaje' => 'Ranking obtenido del TOP 5 correctamente',
+        'datos' => $ranking,
+    ], 200);
+}
 
     public function adminIndex()
 {
